@@ -1,0 +1,91 @@
+<html>
+<head>
+    <title>Nick-Knack User Guide</title>
+    <link rel="icon" type="image/x-icon" href="./guide/launchIcon.jpg">
+    <link rel="stylesheet" href="./guide/default.css" />
+    <script src="./guide/content.js"></script>
+    <script defer src="./guide/alpine.min.js"></script>
+    <link rel="stylesheet" href="./guide/uikit.min.css" />
+    <script src="./guide/uikit.min.js"></script>
+    <script src="./guide/uikit-icons.min.js"></script>
+    <script src="./guide/markdown-it.min.js"></script>
+</head>
+<body x-data="{selectedPart: undefined}"> 
+    <div class="uk-navbar-container" uk-sticky 
+        id="navBar" :class="$store.display.atTop? '' : 'uk-box-shadow-large'">
+        <div uk-navbar>
+            <div class="uk-navbar-center">
+                <h1 class="uk-text-large uk-margin-top">Welcome to Nick-Knack</h1>
+                <img class="launch-icon" src="./guide/launchIcon.jpg">
+            </div>
+        </div>
+    </div>
+    <div class="uk-container uk-background-muted uk-flex uk-flex-column uk-flex-middle" >
+        
+        <div uk-height-viewport="offset-bottom: 70"></div>
+        <template x-for="section in sections">
+            <div class="uk-card uk-card-small uk-card-default uk-margin section-card">
+                <div class="uk-card-header">
+                    <h3 class="uk-card-title" x-text="section.title"></h3>
+                </div>
+                <div class="uk-card-body" >
+                    <template x-for="(part, index) in section.body">
+                            <div @click="selectedPart=part" uk-toggle="target: #screenshot-modal">
+                            <div class="uk-flex uk-flex-middle uk-flex-between">
+                                <div><template x-for="text in part.texts">
+                                    <p x-html="renderText(text)" class="card-text"></p>
+                                </template></div>
+                                <template x-if="part.img">
+                                    <img :src="part.img.src" :class="part.img.class">
+                                </template>
+                            </div>
+                            <template x-if="index +1 !== section.body.length"><hr></template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <!-- Screenshot Modal -->
+    <div id="screenshot-modal" uk-modal>
+        <div class="uk-modal-dialog uk-modal-body">
+            <h2 class="uk-modal-title">Screenshot</h2>
+            <template x-if="selectedPart">
+                <div class="uk-flex uk-flex-column uk-flex-middle">
+                    <template x-if="selectedPart.img">
+                        <img :src="selectedPart.img.src" class="modal-img">
+                    </template>
+                    <div><template x-for="text in selectedPart.texts">
+                        <p x-html="renderText(text)" class="card-text"></p>
+                    </template></div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+</body>
+    
+<script>
+const md = window.markdownit()
+const proxy = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
+const defaultCodeInlineRenderer = md.renderer.rules.code_inline || proxy;
+md.renderer.rules.code_inline = function(tokens, idx, options, env, self) {
+   tokens[idx].attrJoin("class", "uk-text-default")
+   return defaultCodeInlineRenderer(tokens, idx, options, env, self)
+};
+
+const renderText = (text) => md.renderInline(text)
+const { sections } = content()
+
+document.addEventListener('alpine:init', () => {
+    Alpine.store('display', {
+        atTop: true,
+    })
+})
+
+UIkit.util.on("#navBar", "active", () => Alpine.store("display").atTop = false)
+UIkit.util.on("#navBar", "inactive", () => Alpine.store("display").atTop = true)
+</script>
+
+</html>

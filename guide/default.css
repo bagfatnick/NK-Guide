@@ -1,0 +1,33 @@
+div.section-card {
+  width: min(100%, 800px);
+}
+p.card-text {
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+p.card-text:last-child {
+  margin-bottom: 0px;
+}
+
+img.launch-icon {
+  max-height: 50px;
+  border-radius: 10px;
+  border: solid white 1px;
+}
+
+img.screenshot {
+  margin: 5px;
+  border-radius: 5px;
+  border: solid black 2px;
+  max-width: 350px;
+}
+
+img.modal-img {
+  margin: 5px;
+  border-radius: 5px;
+  border: solid black 2px;
+}
+
+div.uk-modal-dialog {
+  width: 1000px;
+}

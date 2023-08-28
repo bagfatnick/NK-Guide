@@ -1,0 +1,153 @@
+<html>
+<head>
+    <title>Nick-Knack User Guide</title>
+    <script defer src="./guide/alpine.min.js"></script>
+    <link rel="stylesheet" href="./guide/uikit.min.css" />
+    <script src="./guide/uikit.min.js"></script>
+    <script src="./guide/uikit-icons.min.js"></script>
+    <!-- <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"></script> -->
+    <!-- <script src="./guide/components/SectionCard.js" type="module"></script> -->
+    <!-- <script src="./guide/content.js"></script> -->
+    <!-- <script src="./guide/htmx.min.js"></script> -->
+    <style>
+        img#launchIcon {
+            max-height: 50px;
+            align-self: center;
+            margin: 5px;
+            border-radius: 10px;
+            border: solid white 1px;
+        }
+    </style>
+</head>
+<body x-data> 
+    <nav class="uk-navbar-container">
+        <div class="uk-container">
+            <div uk-navbar>
+                <div class="uk-navbar-center">
+                    <h1 class="uk-navbar-item uk-text-large">Welcome to Nick-Knack</h1>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="uk-container" >
+        <template x-for="section in sections">
+            <div class="uk-card uk-card-default uk-margin">
+                <div class="uk-card-header">
+                    <h3 class="uk-card-title" x-text="sectionTitle(section)"></h3>
+                </div>
+                <div class="uk-card-body" >
+                    <div :id="section"></div>
+                </div>
+            </div>
+        </template>
+        <intro-section></intro-section>
+        <!-- <section-card title="test"></section-card> -->
+    </div>
+        
+    <template x-teleport="#introduction">
+        <div>
+            Nick-Knack is a handover system, currently being piloted in Arnold Lodge. 
+            <br/>
+            It is a digital platform to support the process of a safe handover. It is NOT a replacement to Rio, the Trust's record system. 
+            <br/>
+            Much like any other record system, it is only as up to date as the last time it was updated. 
+        </div>
+    </template>
+    <template x-teleport="#accessing">
+        <div>
+            <div>
+                Nick-Knack can be accessed in the <code>Handover</code> folder in the <code>AL Electronic Filing Tray</code>. <br/>
+                Double click the <code>Nick-Knack</code> icon to launch the app. 
+            </div>
+            <img src="./guide/launchIcon.jpg">
+            <div>
+                In the Welcome screen read the notice and click <code>Login</code>.
+                <br/>
+                If you have not logged in before, you will be asked for your <code>Role</code> and <code>Default ward</code>.
+            </div>
+            <img src="" id="launchIcon">
+        </div>
+    </template>
+
+</body>
+    
+<script>
+const sections = ["introduction", "accessing"]
+const sectionTitle = (section) => {
+    switch(section) {
+        case "introduction": return "Introduction"
+        case "accessing": return "Accessing Nick-Knack"
+    } 
+}
+</script>
+<script type="module">
+import { LitElement, html, map } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/all/lit-all.min.js'
+
+export class IntroSection extends LitElement {
+    static properties = { descriptions: {attribute: false} }
+    constructor() { super()
+        this.descriptions = [{ details: [
+            "Nick-Knack is a handover system, currently being piloted in Arnold Lodge.",
+            "It is a digital platform to support the process of a safe handover. It is NOT a replacement to Rio, the Trust's record system.",
+            "Much like any other record system, it is only as up to date as the last time it was updated."
+        ]}]
+
+    }
+    render() { return html `
+        <section-card title="Introduction" .descriptions=${this.descriptions}/>
+    `}
+    createRenderRoot() {return this}
+}
+customElements.define("intro-section", IntroSection)
+
+export class SectionCard extends LitElement {
+  static properties = { 
+    title: {}, descriptions: {}
+  }
+  constructor() {
+    super()
+    this.title = "",
+    this.descriptions = []
+  }
+  render() { 
+    console.log("descs:", this.descriptions)
+    return html`
+      <div class="uk-card uk-card-default uk-margin">      
+        <div class="uk-card-header">
+            <h3 class="uk-card-title">${this.title}</h3>
+        </div>
+        <div class="uk-card-body">
+            ${map(this.descriptions, d => html`
+                <section-description .details=${d.details} .imgSource=${d.imgSource} />
+            `)}
+        </div>
+      </div>
+    `}
+    createRenderRoot() {return this}
+}
+customElements.define("section-card", SectionCard)
+
+export class SectionDescription extends LitElement {
+    static properties = {
+        details: {}, imgSource: {}
+    }
+    constructor() {
+        super()
+        this.details = ["Paragraph 1"]
+        this.imgSource = undefined
+    }
+    render() { return html`
+        <div>
+            <div>
+                ${map(this.details, d => html`<p>${d}</p>`)}
+            </div>
+            ${this.imgSource ? html`<img src="${this.imgSource}">` : ''}
+        </div>
+    `}
+    createRenderRoot() {return this}
+}
+customElements.define("section-description", SectionDescription)
+
+</script>
+
+</html>
