@@ -3,10 +3,6 @@ div.section-card {
 }
 p.card-text {
   margin-top: 0px;
-  margin-bottom: 10px;
-}
-p.card-text:last-child {
-  margin-bottom: 0px;
 }
 
 img.launch-icon {

@@ -107,6 +107,14 @@ const content = () => {
         "When you're satisfied with the output of the report, press the `Print` button to print the report."
       ], img: { src: "./guide/launchIcon.jpg", class: "screenshot"}
     }]
+  }, {
+    title: "Anything Else?",
+    body: [{
+      texts: [
+        "Nick-Knack is a project undergoing active development by Nick.",  
+        "If you have any questions, comments, or suggestions, drop me (Nick@DrTing.co.uk) an email.\ I'll try to get back to you, and you might see your suggestion get implemented!"
+      ]
+    },]
   },]
 
   return {

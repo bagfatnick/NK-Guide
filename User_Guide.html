@@ -32,7 +32,7 @@
                     <template x-for="(part, index) in section.body">
                             <div @click="selectedPart=part" uk-toggle="target: #screenshot-modal">
                             <div class="uk-flex uk-flex-middle uk-flex-between">
-                                <div><template x-for="text in part.texts">
+                                <div class="uk-panel"><template x-for="text in part.texts">
                                     <p x-html="renderText(text)" class="card-text"></p>
                                 </template></div>
                                 <template x-if="part.img">
@@ -45,12 +45,13 @@
                 </div>
             </div>
         </template>
+        <div uk-height-viewport="offset-bottom: 70"></div>
     </div>
 
     <!-- Screenshot Modal -->
     <div id="screenshot-modal" uk-modal>
         <div class="uk-modal-dialog uk-modal-body">
-            <h2 class="uk-modal-title">Screenshot</h2>
+            <!-- <h2 class="uk-modal-title">Screenshot</h2> -->
             <template x-if="selectedPart">
                 <div class="uk-flex uk-flex-column uk-flex-middle">
                     <template x-if="selectedPart.img">
